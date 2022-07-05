@@ -36,7 +36,6 @@ class Product {
       ]);
       if (isProductNameExist.length > 0)
         return new Error('Tên sản phẩm đã tồn tại');
-      return 'Test';
       const [result] = await pool.execute(queries.insert, [
         TenSP,
         Loai,

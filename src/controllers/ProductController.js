@@ -32,6 +32,7 @@ class ProductController {
     if (!checkReqBodyData(req)) {
       return res.json({
         message: 'Missing required parameter(s)',
+        body: req.body,
       });
     }
     const { TenSP, KhuyenMai, DonGia, GioiTinh, Loai } = req.body;
@@ -43,7 +44,10 @@ class ProductController {
       KhuyenMai
     );
     if (result instanceof Error) return res.status(200).json(result.message);
-    return res.json('OK');
+    return res.json({
+      message: 'OK',
+      result,
+    });
   }
 
   async updateProduct(req, res) {
