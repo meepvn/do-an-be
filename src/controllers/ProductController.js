@@ -1,5 +1,8 @@
 const productModel = require('../models/Product.js');
 const instockModel = require('../models/Instock.js');
+const multer = require('multer');
+const { upload } = require('../middlewares/');
+const { reName } = require('../ulti/');
 
 const checkReqBodyData = (req) => {
   if (
@@ -44,8 +47,12 @@ class ProductController {
       KhuyenMai
     );
     if (result instanceof Error) return res.status(200).json(result.message);
+    upload.array('productImages', 4)(req, res, (err) => {
+      if (err instanceof multer.MulterError)
+        return res.json({ message: 'Error', error: err });
+    });
     return res.json({
-      message: 'OK',
+      message: `OK`,
       result,
     });
   }
@@ -67,6 +74,18 @@ class ProductController {
     );
     if (result instanceof Error) return res.status(200).json(result.message);
     return res.json('OK');
+  }
+
+  async upload(req, res) {
+    upload.array('products', 4)(req, res, (err) => {
+      if (err instanceof multer.MulterError)
+        return res.json({ message: 'Error', error: err });
+      if (req.files) reName(req.files, req.params.id);
+      return res.json({
+        message: `OK,uploaded ${req.files.length} file(s)`,
+        files: req.files,
+      });
+    });
   }
 }
 
