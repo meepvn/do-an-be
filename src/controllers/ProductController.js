@@ -46,7 +46,11 @@ class ProductController {
       DonGia,
       KhuyenMai
     );
-    if (result instanceof Error) return res.status(200).json(result.message);
+    if (result instanceof Error)
+      return res.status(200).json({
+        message: 'Error',
+        result: result.message,
+      });
     upload.array('productImages', 4)(req, res, (err) => {
       if (err instanceof multer.MulterError)
         return res.json({ message: 'Error', error: err });
@@ -88,5 +92,5 @@ class ProductController {
     });
   }
 }
-
+//<input name ="" />
 module.exports = new ProductController();
