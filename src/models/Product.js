@@ -8,13 +8,23 @@ const queries = {
     'insert into sanpham (TenSP,Loai,GioiTinh,DonGia,KhuyenMai) values (?,?,?,?,?)',
   update:
     'update sanpham set TenSP = ?, Loai = ?, GioiTinh = ?, DonGia = ?, KhuyenMai = ? where id = ?',
+  addImageName: 'update sanpham set TenAnh = ? where id = ?',
+  getAllProductType: 'SELECT distinct Loai FROM `sanpham`',
+  getAllInstock: 'select * from soluongsanpham',
 };
 
 class Product {
   async getAll() {
     try {
       const [products] = await pool.execute(queries.getAll);
-      return products;
+      const [instocks] = await pool.execute(queries.getAllInstock);
+      const productsInfo = products.map((product) => {
+        const instock = instocks.filter(
+          (instock) => instock.id_sanpham === product.id
+        );
+        return { ...product, SoLuong: [...instock] };
+      });
+      return productsInfo;
     } catch (error) {
       console.log(error);
       return new Error(error);
@@ -25,7 +35,6 @@ class Product {
       const [result] = await pool.execute(queries.deleteById, [id]);
       return result;
     } catch (error) {
-      console.log(error);
       return new Error(error);
     }
   }
@@ -68,6 +77,22 @@ class Product {
       return result;
     } catch (error) {
       return new Error(error);
+    }
+  }
+  async updateImageName(id, imageName) {
+    try {
+      const result = await pool.execute(queries.addImageName, [imageName, id]);
+      return result;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+  async getAllProductType() {
+    try {
+      const [types] = await pool.execute(queries.getAllProductType);
+      return types.map((type) => type.Loai);
+    } catch (err) {
+      return new Error(err);
     }
   }
 }

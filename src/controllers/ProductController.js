@@ -1,8 +1,6 @@
 const productModel = require('../models/Product.js');
 const instockModel = require('../models/Instock.js');
-const multer = require('multer');
-const { upload } = require('../middlewares/');
-const { reName } = require('../ulti/');
+const { reName, deleteImage } = require('../ulti/');
 
 const checkReqBodyData = (req) => {
   if (
@@ -22,6 +20,12 @@ class ProductController {
     if (products instanceof Error) return res.status(500).json('Error!!!');
     res.status(200).json(products);
   }
+  async getAllProductType(req, res) {
+    const types = await productModel.getAllProductType();
+    if (types instanceof Error) return res.status(500).json('Error!!!');
+    res.status(200).json(types);
+  }
+
   async deleteProductWithId(req, res) {
     const result = await productModel.deleteWithId(req.params.id);
     if (result instanceof Error) return res.status(500).json('Error!!!');
@@ -33,6 +37,7 @@ class ProductController {
   }
   async insertProduct(req, res) {
     if (!checkReqBodyData(req)) {
+      deleteImage(req.file.filename);
       return res.json({
         message: 'Missing required parameter(s)',
         body: req.body,
@@ -46,18 +51,18 @@ class ProductController {
       DonGia,
       KhuyenMai
     );
-    if (result instanceof Error)
-      return res.status(200).json({
-        message: 'Error',
+    if (result instanceof Error) {
+      deleteImage(req.file.filename);
+      return res.status(400).json({
+        status: 'Error',
         result: result.message,
       });
-    upload.array('productImages', 4)(req, res, (err) => {
-      if (err instanceof multer.MulterError)
-        return res.json({ message: 'Error', error: err });
-    });
+    }
+    const fileName = reName(req.file, result.insertId);
+    await productModel.updateImageName(result.insertId, fileName);
     return res.json({
-      message: `OK`,
-      result,
+      status: `OK`,
+      insertId: result.insertId,
     });
   }
 
@@ -76,21 +81,8 @@ class ProductController {
       DonGia,
       KhuyenMai
     );
-    if (result instanceof Error) return res.status(200).json(result.message);
+    if (result instanceof Error) return res.status(400).json(result.message);
     return res.json('OK');
   }
-
-  async upload(req, res) {
-    upload.array('products', 4)(req, res, (err) => {
-      if (err instanceof multer.MulterError)
-        return res.json({ message: 'Error', error: err });
-      if (req.files) reName(req.files, req.params.id);
-      return res.json({
-        message: `OK,uploaded ${req.files.length} file(s)`,
-        files: req.files,
-      });
-    });
-  }
 }
-//<input name ="" />
 module.exports = new ProductController();

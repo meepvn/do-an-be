@@ -1,6 +1,12 @@
 const userModel = require('../models/User');
 const accountModel = require('../models/Account');
 const bcrypt = require('bcryptjs');
+const {
+  generateToken,
+  generateRefreshToken,
+  cookieOptions,
+} = require('../ulti/index');
+
 const checkRequestBody = (req) => {
   if (
     !req.body.TenTaiKhoan ||
@@ -105,9 +111,17 @@ class UserController {
         status: 'Error',
         message: 'Tài khoản hoặc mật khẩu không đúng',
       });
+    const { MatKhau: matKhau, ...accountInfo } = matchedAccount;
+    const { HoTen } = await userModel.getUserById(accountInfo.id_nguoidung);
+    const userInfo = { HoTen, ...accountInfo };
+    const token = generateToken(userInfo);
+    const refreshToken = generateRefreshToken(userInfo);
+    res.cookie('refreshToken', refreshToken, cookieOptions);
     return res.json({
       status: 'OK',
       message: 'Login success',
+      info: userInfo,
+      token,
     });
   }
 }

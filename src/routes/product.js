@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const productController = require('../controllers/ProductController.js');
-
-router.post('/upload/:id', productController.upload);
+// const { authenticateAdmin } = require('../middlewares/auth.js');
+const handleUpload = require('../middlewares/multer');
 router.put('/:id', productController.updateProduct);
 router.delete('/:id', productController.deleteProductWithId);
+router.post('/', handleUpload, productController.insertProduct);
 router.get('/', productController.getAllProduct);
-router.post('/', productController.insertProduct);
+router.get('/type', productController.getAllProductType);
 module.exports = router;

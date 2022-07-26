@@ -4,6 +4,7 @@ const queries = {
   insert: 'insert into nguoidung (HoTen,SDT,DiaChi) values (?,?,?)',
   getAll: 'select * from nguoidung',
   getUserByPhoneNumber: 'select * from nguoidung where SDT = ?',
+  getUserById: 'select * from nguoidung where id = ?',
   deleteById: 'delete from nguoidung where id = ?',
 };
 
@@ -20,6 +21,14 @@ class User {
     try {
       const [result] = await pool.execute(queries.getAll);
       return result;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+  async getUserById(id) {
+    try {
+      const [result] = await pool.execute(queries.getUserById, [id]);
+      return result[0];
     } catch (err) {
       return new Error(err);
     }

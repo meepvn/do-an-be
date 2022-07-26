@@ -23,16 +23,16 @@ const upload = multer({
   fileFilter,
 });
 
-module.exports = upload;
+function handleUpload(req, res, next) {
+  upload.single('product')(req, res, (err) => {
+    if (err instanceof multer.MulterError || !req.file) {
+      return res.status(400).json({
+        status: 'Error',
+        Error: !req.file ? 'Invalid file type / no file found' : err,
+      });
+    }
+    next();
+  });
+}
 
-// function handleUpload(req, res, next) {
-//   upload.array('animals', 2)(req, res, (err) => {
-//     if (err instanceof multer.MulterError) {
-//       return res.json({
-//         message: 'Error',
-//         Error: err,
-//       });
-//     }
-//     next();
-//   });
-// }
+module.exports = handleUpload;

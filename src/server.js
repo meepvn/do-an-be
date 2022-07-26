@@ -4,11 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const port = process.env.PORT || 3100;
-app.use(
-  cors({
-    origin: '*',
-  })
-);
+app.use(cors());
 app.use(express.static('./public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
