@@ -24,7 +24,8 @@ class Product {
         );
         return { ...product, SoLuong: [...instock] };
       });
-      return productsInfo;
+      const types = await this.getAllProductType();
+      return { products: productsInfo, types };
     } catch (error) {
       console.log(error);
       return new Error(error);
