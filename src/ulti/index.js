@@ -22,6 +22,27 @@ function generateToken(data) {
   return token;
 }
 
+function addToken(token) {
+  fs.readFile('./src/data/tokens.json', (err, jsonData) => {
+    if (err) console.log(err);
+    const data = JSON.parse(jsonData);
+    data.push(token);
+    fs.writeFile('./src/data/tokens.json', JSON.stringify(data), (err) => {
+      if (err) console.log(err);
+    });
+  });
+}
+
+function removeToken(token) {
+  fs.readFile('./src/data/tokens.json', (err, jsonData) => {
+    if (err) console.log(err);
+    const data = JSON.parse(jsonData).filter((item) => item !== token);
+    fs.writeFile('./src/data/tokens.json', JSON.stringify(data), (err) => {
+      if (err) console.log(err);
+    });
+  });
+}
+
 function generateRefreshToken(data) {
   const token = jwt.sign(data, process.env.REFRESH_TOKEN, { expiresIn: '5s' });
   return token;
@@ -39,4 +60,6 @@ module.exports = {
   generateRefreshToken,
   cookieOptions,
   deleteImage,
+  addToken,
+  removeToken,
 };

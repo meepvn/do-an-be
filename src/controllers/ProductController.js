@@ -17,28 +17,45 @@ const checkReqBodyData = (req) => {
 class ProductController {
   async getAllProduct(req, res) {
     const products = await productModel.getAll();
-    if (products instanceof Error) return res.status(500).json('Error!!!');
+    if (products instanceof Error)
+      return res.status(500).json({
+        status: 'Error',
+        message: result?.message,
+      });
     res.status(200).json(products);
   }
   async getAllProductType(req, res) {
     const types = await productModel.getAllProductType();
-    if (types instanceof Error) return res.status(500).json('Error!!!');
+    if (types instanceof Error)
+      return res.status(500).json({
+        status: 'Error',
+        message: result?.message,
+      });
     res.status(200).json(types);
   }
 
   async deleteProductWithId(req, res) {
     const result = await productModel.deleteWithId(req.params.id);
-    if (result instanceof Error) return res.status(500).json('Error!!!');
+    if (result instanceof Error)
+      return res.status(500).json({
+        status: 'Error',
+        message: result?.message,
+      });
 
     const instockResult = await instockModel.deleteByProductId(req.params.id);
 
-    if (instockResult instanceof Error) return res.status(500).json('Error!!!');
+    if (instockResult instanceof Error)
+      return res.status(500).json({
+        status: 'Error',
+        message: result?.message,
+      });
     res.status(200).json('OK');
   }
   async insertProduct(req, res) {
     if (!checkReqBodyData(req)) {
       deleteImage(req.file.filename);
       return res.json({
+        status: 'Error',
         message: 'Missing required parameter(s)',
         body: req.body,
       });
@@ -81,8 +98,15 @@ class ProductController {
       DonGia,
       KhuyenMai
     );
-    if (result instanceof Error) return res.status(400).json(result.message);
-    return res.json('OK');
+    if (result instanceof Error)
+      return res.status(400).json({
+        status: 'Error',
+        message: result.message,
+      });
+    return res.json({
+      status: 'OK',
+      message: result,
+    });
   }
 }
 module.exports = new ProductController();

@@ -1,11 +1,8 @@
 const userModel = require('../models/User');
 const accountModel = require('../models/Account');
 const bcrypt = require('bcryptjs');
-const {
-  generateToken,
-  generateRefreshToken,
-  cookieOptions,
-} = require('../ulti/index');
+
+const { generateToken, addToken } = require('../ulti/index');
 
 const checkRequestBody = (req) => {
   if (
@@ -115,8 +112,7 @@ class UserController {
     const { HoTen } = await userModel.getUserById(accountInfo.id_nguoidung);
     const userInfo = { HoTen, ...accountInfo };
     const token = generateToken(userInfo);
-    const refreshToken = generateRefreshToken(userInfo);
-    res.cookie('refreshToken', refreshToken, cookieOptions);
+    // addToken(token);
     return res.json({
       status: 'OK',
       message: 'Login success',
