@@ -72,7 +72,7 @@ class ProductController {
       deleteImage(req.file.filename);
       return res.status(400).json({
         status: 'Error',
-        result: result.message,
+        message: result.message,
       });
     }
     const fileName = reName(req.file, result.insertId);

@@ -36,7 +36,7 @@ class Instock {
         Size,
       ]);
       if (isSizeExist.length > 0)
-        return new Error(`Sản phẩm id ${id_sanpham} đã tồn tại size ${Size}`);
+        return new Error(`Sản phẩm đã tồn tại size ${Size}`);
       const [result] = await pool.execute(queries.insert, [
         id_sanpham,
         Size,

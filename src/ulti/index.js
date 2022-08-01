@@ -47,6 +47,10 @@ function generateRefreshToken(data) {
   const token = jwt.sign(data, process.env.REFRESH_TOKEN, { expiresIn: '5s' });
   return token;
 }
+
+function isUniqueArray(arr) {
+  return arr.every((item, index) => arr.indexOf(item) === index);
+}
 const cookieOptions = {
   sameSite: 'none',
   secure: true,
@@ -62,4 +66,5 @@ module.exports = {
   deleteImage,
   addToken,
   removeToken,
+  isUniqueArray,
 };
