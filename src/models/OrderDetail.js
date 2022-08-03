@@ -2,13 +2,13 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   insert:
-    'insert into chitietdonhang (id_donhang,id_sanpham,SoLuong) values (?,?,?)',
+    'insert into chitietdonhang (id_donhang,id_sanpham,id_soluong,SoLuong) values (?,?,?,?)',
   getProductIdsByOrder:
     'select id_sanpham from chitietdonhang where id_donhang = ?',
 };
 
 class OrderDetail {
-  async insertDetail(id_donhang, id_sanpham, SoLuong) {
+  async insertDetail(id_donhang, id_sanpham,id_soluong, SoLuong) {
     try {
       const productIds = await this.getProductIdsByOrder(id_donhang);
       if (productIds.includes(id_sanpham))
@@ -16,6 +16,7 @@ class OrderDetail {
       const [result] = pool.execute(queries.insert, [
         id_donhang,
         id_sanpham,
+        id_soluong,
         SoLuong,
       ]);
       return result;

@@ -42,6 +42,7 @@ class InstockController {
       await detailModel.insertDetail(
         orderResult.insertId,
         product.id,
+        product.id_soluong,
         product.SoLuong
       );
     });

@@ -4,7 +4,7 @@ const queries = {
   insert:
     'insert into donhang (id_nguoidung,NgayTao,TinhTrang,GhiChu) values (?,?,?,?)',
     getAllOrders:'select * from donhang',
-    getAllDetails:''
+    getAllDetails:'select * from chitietdonhang'
 };
 
 class Order {
