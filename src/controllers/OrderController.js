@@ -49,6 +49,14 @@ class InstockController {
       status: 'OK',
     });
   }
+  async getAllOrder(){
+    const orders = await orderModel.getAllOrders();
+    if(orders instanceof Error) return res.json({
+      status:'Error',
+      message:orders.message
+    })
+    return res.json(orders)
+  }
 }
 
 module.exports = new InstockController();

@@ -5,12 +5,12 @@ const { reName, deleteImage } = require('../ulti/');
 const checkReqBodyData = (req) => {
   if (
     !req.body.TenSP ||
-    !req.body.KhuyenMai ||
     !req.body.DonGia ||
     !req.body.GioiTinh ||
     !req.body.Loai
   )
-    return false;
+  return false;
+    if(!req.body.KhuyenMai && req.body.KhuyenMai !== 0) return false;
   return true;
 };
 
