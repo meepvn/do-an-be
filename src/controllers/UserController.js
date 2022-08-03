@@ -80,9 +80,65 @@ class UserController {
     }
     return res.json({
       status: 'OK',
+      message: 'Register successed',
       result: insertAccountResult,
     });
   }
+
+  async registerDefault(req, res) {
+    if (!req.body.Email || !req.body.HoTen || !req.body.SDT || !req.body.DiaChi)
+      return res.json({
+        status: 'Error',
+        message: 'Missing required parameter(s)',
+        body: req.body,
+      });
+    const { HoTen, SDT, DiaChi, Email } = req.body;
+    console.log('body', req.body);
+    const isPhoneNumberExist = await userModel.findUserByPhoneNumber(SDT);
+    if (isPhoneNumberExist > 0 || isPhoneNumberExist instanceof Error) {
+      return res.json({
+        status: 'Error',
+        message: isPhoneNumberExist?.message ?? 'Số điện thoại đã tồn tại',
+      });
+    }
+    const isEmailExist = await accountModel.findByEmail(Email);
+    if (isEmailExist > 0 || isEmailExist instanceof Error) {
+      return res.json({
+        status: 'Error',
+        message: isEmailExist?.message ?? 'Email đã tồn tại',
+      });
+    }
+    const insertUserResult = await userModel.insert(HoTen, SDT, DiaChi);
+    if (insertUserResult instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: insertUserResult.message,
+      });
+    const { insertId } = insertUserResult;
+    const insertAccountResult = await accountModel.insert(
+      insertId,
+      `user${insertId}`,
+      '123456',
+      Email,
+      0
+    );
+    if (insertAccountResult instanceof Error) {
+      await userModel.deleteById(insertId);
+      return res.json({
+        status: 'Error',
+        message: insertAccountResult.message,
+      });
+    }
+    return res.json({
+      status: 'OK',
+      message: 'Register successed',
+      user: {
+        username: `user${insertId}`,
+        password: '123456',
+      },
+    });
+  }
+
   async login(req, res) {
     if (!req.body.TenTaiKhoan || !req.body.MatKhau)
       return res.json({

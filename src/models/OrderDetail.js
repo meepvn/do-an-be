@@ -2,31 +2,31 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   insert:
-    'insert into chitietdonhang (id_donhang,id_sanpham,id_soluong,SoLuong) values (?,?,?,?)',
-  getProductIdsByOrder:
-    'select id_sanpham from chitietdonhang where id_donhang = ?',
+    'insert into chitietdonhang (id_donhang,id_soluong,SoLuong) values (?,?,?)',
+  getInstockIdsByOrderId:
+    'select id_soluong from chitietdonhang where id_donhang = ?',
 };
 
 class OrderDetail {
-  async insertDetail(id_donhang, id_sanpham,id_soluong, SoLuong) {
+  async insertDetail(id_donhang, id_soluong, SoLuong) {
     try {
-      const productIds = await this.getProductIdsByOrder(id_donhang);
-      if (productIds.includes(id_sanpham))
+      const instockIds = await this.getInstockIdsByOrderId(id_donhang);
+      if (instockIds.includes(id_soluong))
         return new Error('Sản phẩm đã tồn tại trong đơn hàng');
-      const [result] = pool.execute(queries.insert, [
+      const [result] = await pool.execute(queries.insert, [
         id_donhang,
-        id_sanpham,
         id_soluong,
         SoLuong,
       ]);
       return result;
     } catch (err) {
+      console.log('ERROR!', err);
       return new Error(err);
     }
   }
-  async getProductIdsByOrder(id_donhang) {
+  async getInstockIdsByOrderId(id_donhang) {
     try {
-      const [result] = await pool.execute(queries.getProductIdsByOrder, [
+      const [result] = await pool.execute(queries.getInstockIdsByOrderId, [
         id_donhang,
       ]);
       const productIds = result.map((product) => product.id_sanpham);

@@ -2,6 +2,7 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   getAll: 'select * from sanpham',
+  getById: 'select * from sanpham where id = ?',
   getByName: 'select * from sanpham where TenSP = ?',
   deleteById: 'delete from sanpham where id = ?',
   insert:
@@ -28,6 +29,14 @@ class Product {
       return { products: productsInfo, types };
     } catch (error) {
       console.log(error);
+      return new Error(error);
+    }
+  }
+  async getById(id) {
+    try {
+      const [product] = await pool.execute(queries.getById, [id]);
+      return product[0];
+    } catch (error) {
       return new Error(error);
     }
   }

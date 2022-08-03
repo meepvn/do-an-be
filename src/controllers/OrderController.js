@@ -21,7 +21,7 @@ class InstockController {
         message: 'Field name products must be an array',
         products,
       });
-    if (!isUniqueArray(products.map((product) => product.id)))
+    if (!isUniqueArray(products.map((product) => product.id_soluong)))
       return res.json({
         status: 'Error',
         message: 'Duplicate product ids',
@@ -41,7 +41,6 @@ class InstockController {
     products.forEach(async (product) => {
       await detailModel.insertDetail(
         orderResult.insertId,
-        product.id,
         product.id_soluong,
         product.SoLuong
       );
@@ -50,13 +49,14 @@ class InstockController {
       status: 'OK',
     });
   }
-  async getAllOrder(){
+  async getAllOrder(req, res) {
     const orders = await orderModel.getAllOrders();
-    if(orders instanceof Error) return res.json({
-      status:'Error',
-      message:orders.message
-    })
-    return res.json(orders)
+    if (orders instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: orders.message,
+      });
+    return res.json(orders);
   }
 }
 

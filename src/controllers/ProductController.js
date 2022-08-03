@@ -9,8 +9,8 @@ const checkReqBodyData = (req) => {
     !req.body.GioiTinh ||
     !req.body.Loai
   )
-  return false;
-    if(!req.body.KhuyenMai && req.body.KhuyenMai !== 0) return false;
+    return false;
+  if (!req.body.KhuyenMai && req.body.KhuyenMai !== 0) return false;
   return true;
 };
 
@@ -35,6 +35,9 @@ class ProductController {
   }
 
   async deleteProductWithId(req, res) {
+    const product = await productModel.getById(req.params.id);
+    console.log(product);
+    console.log(deleteImage(product.TenAnh));
     const result = await productModel.deleteWithId(req.params.id);
     if (result instanceof Error)
       return res.status(500).json({
@@ -49,7 +52,9 @@ class ProductController {
         status: 'Error',
         message: result?.message,
       });
-    res.status(200).json('OK');
+    res.status(200).json({
+      status: 'OK',
+    });
   }
   async insertProduct(req, res) {
     if (!checkReqBodyData(req)) {

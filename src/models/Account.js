@@ -5,6 +5,7 @@ const queries = {
   insert: 'insert into taikhoan values(?,?,?,?,?)',
   getByUserNameAndEmail:
     'select * from taikhoan where TenTaiKhoan = ? or Email = ?',
+  getByEmail: 'select * from taikhoan where Email = ?',
 };
 
 class Account {
@@ -35,6 +36,16 @@ class Account {
       return new Error(err);
     }
   }
+
+  async findByEmail(Email) {
+    try {
+      const [result] = await pool.execute(queries.getByEmail, [Email]);
+      return result.length;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+
   async getAccountByUserNameOrEmail(TenTaiKhoan, Email) {
     try {
       const [result] = await pool.execute(queries.getByUserNameAndEmail, [
