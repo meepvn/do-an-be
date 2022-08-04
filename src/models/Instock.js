@@ -2,7 +2,7 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   getAll:
-    'select soluongsanpham.id,TenSP,Size,SoLuong from soluongsanpham,sanpham where sanpham.id=soluongsanpham.id_sanpham',
+    'select soluongsanpham.id,TenSP,Size,SoLuong,DonGia,KhuyenMai from soluongsanpham,sanpham where sanpham.id=soluongsanpham.id_sanpham',
   getByProductIdAndSize:
     'select * from soluongsanpham where id_sanpham= ? and Size = ?',
   insert: 'insert into soluongsanpham (id_sanpham,Size,SoLuong) values (?,?,?)',
