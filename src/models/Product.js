@@ -23,7 +23,7 @@ class Product {
         const instock = instocks.filter(
           (instock) => instock.MaSanPham === product.id
         );
-        return { ...product, SoLuong: [...instock] };
+        return { ...product, ChiTiet: [...instock] };
       });
       const types = await this.getAllProductType();
       return { products: productsInfo, types };
