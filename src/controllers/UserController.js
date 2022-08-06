@@ -165,7 +165,7 @@ class UserController {
         message: 'Tài khoản hoặc mật khẩu không đúng',
       });
     const { MatKhau: matKhau, ...accountInfo } = matchedAccount;
-    const { HoTen } = await userModel.getUserById(accountInfo.id_nguoidung);
+    const { HoTen } = await userModel.getUserById(accountInfo.MaNguoiDung);
     const userInfo = { HoTen, ...accountInfo };
     const token = generateToken(userInfo);
     // addToken(token);
