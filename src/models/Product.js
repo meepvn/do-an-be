@@ -11,7 +11,7 @@ const queries = {
     'update sanpham set TenSP = ?, Loai = ?, GioiTinh = ?, DonGia = ?, KhuyenMai = ? where id = ?',
   addImageName: 'update sanpham set TenAnh = ? where id = ?',
   getAllProductType: 'SELECT distinct Loai FROM `sanpham`',
-  getAllInstock: 'select * from soluongsanpham',
+  getAllInstock: 'select * from chitietsanpham',
 };
 
 class Product {

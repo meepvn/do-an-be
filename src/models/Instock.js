@@ -2,13 +2,13 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   getAll:
-    'select soluongsanpham.id,TenSP,Size,SoLuong,DonGia,KhuyenMai,TenAnh from soluongsanpham,sanpham where sanpham.id=soluongsanpham.id_sanpham',
+    'select chitietsanpham.id,TenSP,Size,SoLuong,DonGia,KhuyenMai,TenAnh from chitietsanpham,sanpham where sanpham.id=chitietsanpham.MaSanPham',
   getByProductIdAndSize:
-    'select * from soluongsanpham where id_sanpham= ? and Size = ?',
-  insert: 'insert into soluongsanpham (id_sanpham,Size,SoLuong) values (?,?,?)',
-  deleteByProductId: 'delete from soluongsanpham where id_sanpham= ?',
-  deleteById: 'delete from soluongsanpham where id = ?',
-  update: 'update soluongsanpham set SoLuong = ? where id = ?',
+    'select * from chitietsanpham where MaSanPham= ? and Size = ?',
+  insert: 'insert into chitietsanpham (MaSanPham,Size,SoLuong) values (?,?,?)',
+  deleteByProductId: 'delete from chitietsanpham where MaSanPham= ?',
+  deleteById: 'delete from chitietsanpham where id = ?',
+  update: 'update chitietsanpham set SoLuong = ? where id = ?',
 };
 
 class Instock {
