@@ -2,9 +2,9 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   insert:
-    'insert into chitietdonhang (id_donhang,id_soluong,SoLuong) values (?,?,?)',
+    'insert into chitietdonhang (MaDonHang,MaChiTiet,SoLuong) values (?,?,?)',
   getInstockIdsByOrderId:
-    'select id_soluong from chitietdonhang where id_donhang = ?',
+    'select MaChiTiet from chitietdonhang where MaDonHang = ?',
 };
 
 class OrderDetail {

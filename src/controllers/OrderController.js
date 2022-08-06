@@ -41,7 +41,7 @@ class InstockController {
     products.forEach(async (product) => {
       await detailModel.insertDetail(
         orderResult.insertId,
-        product.id_soluong,
+        product.id_chitiet,
         product.SoLuong
       );
     });

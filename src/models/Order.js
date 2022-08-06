@@ -2,11 +2,11 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   insert:
-    'insert into donhang (id_nguoidung,NgayTao,TinhTrang,GhiChu) values (?,?,?,?)',
+    'insert into donhang (MaNguoiDung,NgayTao,TinhTrang,GhiChu) values (?,?,?,?)',
   getAllOrders:
-    'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.id_nguoidung = nguoidung.id',
+    'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id',
   getAllDetails:
-    'select chitietdonhang.id,chitietdonhang.id_donhang,TenSP,Size,DonGia,KhuyenMai,chitietdonhang.SoLuong from chitietdonhang,sanpham,soluongsanpham where sanpham.id = soluongsanpham.id_sanpham and chitietdonhang.id_soluong = soluongsanpham.id',
+    'select chitietdonhang.id,chitietdonhang.MaDonHang,TenSP,Size,DonGia,KhuyenMai,chitietdonhang.SoLuong from chitietdonhang,sanpham,chitietsanpham where sanpham.id = chitietsanpham.MaSanPham and chitietdonhang.MaChiTiet = chitietsanpham.id',
 };
 
 class Order {
