@@ -21,7 +21,7 @@ class Product {
       const [instocks] = await pool.execute(queries.getAllInstock);
       const productsInfo = products.map((product) => {
         const instock = instocks.filter(
-          (instock) => instock.id_sanpham === product.id
+          (instock) => instock.MaSanPham === product.id
         );
         return { ...product, SoLuong: [...instock] };
       });
