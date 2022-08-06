@@ -29,7 +29,7 @@ class Order {
       const [details] = await pool.execute(queries.getAllDetails);
       const ordersWithDetails = orders.map((order) => {
         const detail = details.filter(
-          (detail) => detail.id_donhang === order.id
+          (detail) => detail.MaDonHang === order.id
         );
         return { ...order, ChiTiet: [...detail] };
       });
