@@ -112,6 +112,8 @@ class ProductController {
     });
   }
   async uploadImage(req, res) {
+    const product = await productModel.getById(req.params.id);
+    if (product.TenAnh) deleteImage(product.TenAnh);
     const fileName = reName(req.file, req.params.id);
     await productModel.updateImageName(req.params.id, fileName);
     return res.json({
