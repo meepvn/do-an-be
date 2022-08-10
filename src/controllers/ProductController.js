@@ -36,8 +36,6 @@ class ProductController {
 
   async deleteProductWithId(req, res) {
     const product = await productModel.getById(req.params.id);
-    console.log(product);
-    console.log(deleteImage(product.TenAnh));
     const result = await productModel.deleteWithId(req.params.id);
     if (result instanceof Error)
       return res.status(500).json({
@@ -111,6 +109,13 @@ class ProductController {
     return res.json({
       status: 'OK',
       message: result,
+    });
+  }
+  async uploadImage(req, res) {
+    const fileName = reName(req.file, req.params.id);
+    await productModel.updateImageName(req.params.id, fileName);
+    return res.json({
+      status: `OK`,
     });
   }
 }

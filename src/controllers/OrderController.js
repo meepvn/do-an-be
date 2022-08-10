@@ -58,6 +58,16 @@ class InstockController {
       });
     return res.json(orders);
   }
+
+  async getOrdersByUserId(req, res) {
+    const orders = await orderModel.getOrdersById(req.user.MaNguoiDung);
+    if (orders instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: orders.message,
+      });
+    return res.json(orders);
+  }
 }
 
 module.exports = new InstockController();

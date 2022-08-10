@@ -6,6 +6,7 @@ const queries = {
   getByUserNameAndEmail:
     'select * from taikhoan where TenTaiKhoan = ? or Email = ?',
   getByEmail: 'select * from taikhoan where Email = ?',
+  deleteByUserId: 'delete from taikhoan where MaNguoiDung = ?',
 };
 
 class Account {
@@ -53,6 +54,15 @@ class Account {
         Email,
       ]);
       return result[0];
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+
+  async deleteById(id) {
+    try {
+      const [result] = await pool.execute(queries.deleteByUserId, [id]);
+      return result;
     } catch (err) {
       return new Error(err);
     }

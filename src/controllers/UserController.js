@@ -2,7 +2,7 @@ const userModel = require('../models/User');
 const accountModel = require('../models/Account');
 const bcrypt = require('bcryptjs');
 
-const { generateToken, addToken } = require('../ulti/index');
+const { generateToken } = require('../ulti/index');
 
 const checkRequestBody = (req) => {
   if (
@@ -93,7 +93,6 @@ class UserController {
         body: req.body,
       });
     const { HoTen, SDT, DiaChi, Email } = req.body;
-    console.log('body', req.body);
     const isPhoneNumberExist = await userModel.findUserByPhoneNumber(SDT);
     if (isPhoneNumberExist > 0 || isPhoneNumberExist instanceof Error) {
       return res.json({
@@ -168,12 +167,46 @@ class UserController {
     const { HoTen } = await userModel.getUserById(accountInfo.MaNguoiDung);
     const userInfo = { HoTen, ...accountInfo };
     const token = generateToken(userInfo);
-    // addToken(token);
     return res.json({
       status: 'OK',
       message: 'Login success',
       info: userInfo,
       token,
+    });
+  }
+  async getUserInfo(req, res) {
+    const user = await userModel.getUserById(req?.user?.MaNguoiDung);
+    return res.json({
+      status: 'OK',
+      user,
+    });
+  }
+  async deleteById(req, res) {
+    const { id } = req.params;
+    const accountResult = await accountModel.deleteById(id);
+    const userResult = await userModel.deleteById(id);
+    console.log(userResult);
+    console.log(accountResult);
+    return res.json({
+      status: 'OK',
+    });
+  }
+
+  async updateById(req, res) {
+    const { HoTen, SDT, DiaChi } = req.body;
+    const updateResult = await userModel.updateById(
+      HoTen,
+      SDT,
+      DiaChi,
+      req.params.id
+    );
+    if (updateResult instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: updateResult.message,
+      });
+    return res.json({
+      status: 'OK',
     });
   }
 }

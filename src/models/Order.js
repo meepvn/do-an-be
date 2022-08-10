@@ -7,6 +7,8 @@ const queries = {
     'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id',
   getAllDetails:
     'select chitietdonhang.id,chitietdonhang.MaDonHang,TenSP,Size,DonGia,KhuyenMai,chitietdonhang.SoLuong from chitietdonhang,sanpham,chitietsanpham where sanpham.id = chitietsanpham.MaSanPham and chitietdonhang.MaChiTiet = chitietsanpham.id',
+  getById:
+    'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id and nguoidung.id = ?',
 };
 
 class Order {
@@ -26,6 +28,22 @@ class Order {
   async getAllOrders() {
     try {
       const [orders] = await pool.execute(queries.getAllOrders);
+      const [details] = await pool.execute(queries.getAllDetails);
+      const ordersWithDetails = orders.map((order) => {
+        const detail = details.filter(
+          (detail) => detail.MaDonHang === order.id
+        );
+        return { ...order, ChiTiet: [...detail] };
+      });
+      return ordersWithDetails;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+
+  async getOrdersById(id) {
+    try {
+      const [orders] = await pool.execute(queries.getById, [id]);
       const [details] = await pool.execute(queries.getAllDetails);
       const ordersWithDetails = orders.map((order) => {
         const detail = details.filter(
