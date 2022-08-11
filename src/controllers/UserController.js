@@ -20,10 +20,7 @@ const checkRequestBody = (req) => {
 class UserController {
   async getAllUsers(req, res) {
     const result = await userModel.getAll();
-    res.json({
-      status: 'OK',
-      result,
-    });
+    res.json(result);
   }
   async register(req, res) {
     if (!checkRequestBody(req))

@@ -20,7 +20,7 @@ class ProductController {
     if (products instanceof Error)
       return res.status(500).json({
         status: 'Error',
-        message: result?.message,
+        message: products?.message,
       });
     res.status(200).json(products);
   }

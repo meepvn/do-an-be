@@ -4,8 +4,7 @@ const queries = {
   getAll:
     'select nguoidung.*,taikhoan.TenTaiKhoan,taikhoan.Email from nguoidung,taikhoan where nguoidung.id = taikhoan.MaNguoiDung',
   getUserByPhoneNumber: 'select * from nguoidung where SDT = ?',
-  getUserById:
-    'select nguoidung.*,taikhoan.TenTaiKhoan,taikhoan.Email from nguoidung,taikhoan where nguoidung.id = taikhoan.MaNguoiDung and nguoidung.id = ?',
+  getUserById: 'select * from nguoidung where id = ?',
   deleteById: 'delete from nguoidung where id = ?',
   updateById:
     'update nguoidung set HoTen = ?, SDT = ?, DiaChi = ? where id = ?',
