@@ -178,12 +178,28 @@ class UserController {
       user,
     });
   }
+
+  async updatePersonal(req, res) {
+    const { HoTen, SDT, DiaChi } = req.body;
+    const updateResult = await userModel.updateById(
+      HoTen,
+      SDT,
+      DiaChi,
+      req.user.MaNguoiDung
+    );
+    if (updateResult instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: updateResult.message,
+      });
+    return res.json({
+      status: 'OK',
+    });
+  }
   async deleteById(req, res) {
     const { id } = req.params;
     const accountResult = await accountModel.deleteById(id);
     const userResult = await userModel.deleteById(id);
-    console.log(userResult);
-    console.log(accountResult);
     return res.json({
       status: 'OK',
     });

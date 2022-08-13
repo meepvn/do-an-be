@@ -4,7 +4,7 @@ require('dotenv').config();
 
 function reName(file, productId) {
   const extension = file.filename.split('.').pop();
-  const newName = `SP${productId}.${extension}`;
+  const newName = `${productId}-${Date.now()}.${extension}`;
   fs.renameSync(`public/images/${file.filename}`, `public/images/${newName}`);
   return newName;
 }
