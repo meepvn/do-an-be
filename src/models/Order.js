@@ -5,10 +5,11 @@ const queries = {
     'insert into donhang (MaNguoiDung,NgayTao,TinhTrang,GhiChu) values (?,?,?,?)',
   getAllOrders:
     'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id',
-  getAllDetails:
-    'select chitietdonhang.id,chitietdonhang.MaDonHang,TenSP,Size,DonGia,KhuyenMai,chitietdonhang.SoLuong from chitietdonhang,sanpham,chitietsanpham where sanpham.id = chitietsanpham.MaSanPham and chitietdonhang.MaChiTiet = chitietsanpham.id',
-  getById:
+  getAllDetails: 'select * from chitietdonhang',
+  getByUserId:
     'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id and nguoidung.id = ?',
+  updateById: 'update donhang set TinhTrang = ?, GhiChu = ? where id = ?',
+  deleteById: 'delete from donhang where id = ?',
 };
 
 class Order {
@@ -30,6 +31,32 @@ class Order {
       const [orders] = await pool.execute(queries.getAllOrders);
       const [details] = await pool.execute(queries.getAllDetails);
       const ordersWithDetails = orders.map((order) => {
+        const matchedDetails = details.filter(
+          (detail) => detail.MaDonHang === order.id
+        );
+        const detailInfo = matchedDetails.map((detail) => {
+          const { MaDonHang, ...info } = detail;
+          info.ThanhTien =
+            detail.DonGia * detail.SoLuong * (1 - detail.KhuyenMai / 100);
+          return info;
+        });
+        order.TongTien = detailInfo.reduce(
+          (result, current) => result + current.ThanhTien,
+          0
+        );
+        return { ...order, ChiTiet: [...detailInfo] };
+      });
+      return ordersWithDetails;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+
+  async getOrdersByUserId(id) {
+    try {
+      const [orders] = await pool.execute(queries.getByUserId, [id]);
+      const [details] = await pool.execute(queries.getAllDetails);
+      const ordersWithDetails = orders.map((order) => {
         const detail = details.filter(
           (detail) => detail.MaDonHang === order.id
         );
@@ -41,17 +68,23 @@ class Order {
     }
   }
 
-  async getOrdersById(id) {
+  async updateById(TinhTrang, GhiChu, id) {
     try {
-      const [orders] = await pool.execute(queries.getById, [id]);
-      const [details] = await pool.execute(queries.getAllDetails);
-      const ordersWithDetails = orders.map((order) => {
-        const detail = details.filter(
-          (detail) => detail.MaDonHang === order.id
-        );
-        return { ...order, ChiTiet: [...detail] };
-      });
-      return ordersWithDetails;
+      const [result] = await pool.execute(queries.updateById, [
+        TinhTrang,
+        GhiChu,
+        id,
+      ]);
+      return result;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+
+  async deleteById(id) {
+    try {
+      const [result] = await pool.execute(queries.deleteById, [id]);
+      return result;
     } catch (err) {
       return new Error(err);
     }

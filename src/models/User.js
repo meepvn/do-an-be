@@ -2,7 +2,7 @@ const pool = require('../configs/connectDB');
 const queries = {
   insert: 'insert into nguoidung (HoTen,SDT,DiaChi) values (?,?,?)',
   getAll:
-    'select nguoidung.*,taikhoan.TenTaiKhoan,taikhoan.Email from nguoidung,taikhoan where nguoidung.id = taikhoan.MaNguoiDung',
+    'select nguoidung.*,taikhoan.TenTaiKhoan,taikhoan.Email from nguoidung,taikhoan where nguoidung.id = taikhoan.MaNguoiDung and taikhoan.Quyen = 0 and taikhoan.TrangThai = 1',
   getUserByPhoneNumber: 'select * from nguoidung where SDT = ?',
   getUserById: 'select * from nguoidung where id = ?',
   deleteById: 'delete from nguoidung where id = ?',

@@ -2,20 +2,20 @@ const pool = require('../configs/connectDB');
 const bcrypt = require('bcryptjs');
 const queries = {
   getAll: 'select * from taikhoan',
-  insert: 'insert into taikhoan values(?,?,?,?,?)',
+  insert: 'insert into taikhoan values(?,?,?,?,?,?)',
   getByUserNameAndEmail:
     'select * from taikhoan where TenTaiKhoan = ? or Email = ?',
   getByEmail: 'select * from taikhoan where Email = ?',
   deleteByUserId: 'delete from taikhoan where MaNguoiDung = ?',
   getById: 'select * from taikhoan where MaNguoiDung = ?',
   updateById:
-    'update taikhoan set TenTaiKhoan = ?, Email = ?, Quyen = ? where MaNguoiDung = ?',
+    'update taikhoan set TenTaiKhoan = ?, Email = ?, Quyen = ?, TrangThai = ? where MaNguoiDung = ?',
   updateEmailById: 'update taikhoan set Email = ? where MaNguoiDung = ?',
   updatePasswordById: 'update taikhoan set MatKhau = ? where MaNguoiDung = ?',
 };
 
 class Account {
-  async insert(id, TaiKhoan, MatKhau, Email, Quyen) {
+  async insert(id, TaiKhoan, MatKhau, Email, Quyen, TrangThai) {
     try {
       const salt = await bcrypt.genSalt(10);
       const hashedPwd = await bcrypt.hash(MatKhau, salt);
@@ -25,6 +25,7 @@ class Account {
         hashedPwd,
         Email,
         Quyen,
+        TrangThai,
       ]);
       return result;
     } catch (err) {
@@ -89,7 +90,7 @@ class Account {
       return new Error(err);
     }
   }
-  async updateById(TenTaiKhoan, Email, Quyen, id) {
+  async updateById(TenTaiKhoan, Email, Quyen, TrangThai, id) {
     try {
       const [checkExist] = await pool.execute(
         'select * from taikhoan where (TenTaiKhoan = ? or Email = ?) and MaNguoiDung != ?',
@@ -102,6 +103,7 @@ class Account {
         TenTaiKhoan,
         Email,
         Quyen,
+        TrangThai,
         id,
       ]);
       return result;

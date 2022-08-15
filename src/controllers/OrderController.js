@@ -9,19 +9,14 @@ class InstockController {
         message: 'Missing required parameter(s)',
         body: req.body,
       });
-    const {
-      id_nguoidung,
-      TinhTrang = 'Chờ xác nhận',
-      GhiChu = '',
-      products,
-    } = req.body;
+    const { id_nguoidung, TinhTrang = 1, GhiChu = '', products } = req.body;
     if (!Array.isArray(products))
       return res.json({
         status: 'Error',
         message: 'Field name products must be an array',
         products,
       });
-    if (!isUniqueArray(products.map((product) => product.id_soluong)))
+    if (!isUniqueArray(products.map((product) => product.id_chitiet)))
       return res.json({
         status: 'Error',
         message: 'Duplicate product ids',
@@ -60,13 +55,54 @@ class InstockController {
   }
 
   async getOrdersByUserId(req, res) {
-    const orders = await orderModel.getOrdersById(req.user.MaNguoiDung);
+    const orders = await orderModel.getOrdersByUserId(req.user.MaNguoiDung);
     if (orders instanceof Error)
       return res.json({
         status: 'Error',
         message: orders.message,
       });
     return res.json(orders);
+  }
+
+  async updateOrderById(req, res) {
+    if (!req.body.TinhTrang || !req.body.GhiChu)
+      return res.json({
+        status: 'Error',
+        message: 'Missing required parameter(s)',
+        body: req.body,
+      });
+    const { TinhTrang, GhiChu } = req.body;
+    const updateResult = await orderModel.updateById(
+      TinhTrang,
+      GhiChu,
+      req.params.id
+    );
+    if (updateResult instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: updateResult.message,
+      });
+    return res.json({
+      status: 'OK',
+    });
+  }
+
+  async deleteByOrderid(req, res) {
+    const deleteDetailResult = await detailModel.deleteByOrderId(req.params.id);
+    if (deleteDetailResult instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: deleteDetailResult.message,
+      });
+    const deleteOrderResult = await orderModel.deleteById(req.params.id);
+    if (deleteOrderResult instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: deleteOrderResult.message,
+      });
+    return res.json({
+      status: 'OK',
+    });
   }
 }
 

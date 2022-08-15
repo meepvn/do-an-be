@@ -66,7 +66,8 @@ class UserController {
       TenTaiKhoan,
       MatKhau,
       Email,
-      0
+      0,
+      1
     );
     if (insertAccountResult instanceof Error) {
       await userModel.deleteById(insertId);
@@ -116,7 +117,8 @@ class UserController {
       `user${insertId}`,
       '123456',
       Email,
-      0
+      0,
+      1
     );
     if (insertAccountResult instanceof Error) {
       await userModel.deleteById(insertId);

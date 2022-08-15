@@ -51,6 +51,7 @@ class AccountController {
     if (
       !req.body.TenTaiKhoan ||
       !req.body.Email ||
+      !req.body.TrangThai ||
       (!req.body.Quyen && req.body.Quyen !== 0)
     )
       return res.json({
@@ -58,11 +59,12 @@ class AccountController {
         message: 'Missing required parameter(s)',
         body: req.body,
       });
-    const { TenTaiKhoan, Email, Quyen } = req.body;
+    const { TenTaiKhoan, Email, Quyen, TrangThai } = req.body;
     const result = await accountModel.updateById(
       TenTaiKhoan,
       Email,
       Quyen,
+      TrangThai,
       req.params.id
     );
     if (result instanceof Error)
