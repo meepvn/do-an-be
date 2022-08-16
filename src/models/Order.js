@@ -5,7 +5,8 @@ const queries = {
     'insert into donhang (MaNguoiDung,NgayTao,TinhTrang,GhiChu) values (?,?,?,?)',
   getAllOrders:
     'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id',
-  getAllDetails: 'select * from chitietdonhang',
+  getAllDetails:
+    'select chitietdonhang.*,TenSP,Size from chitietdonhang,sanpham,chitietsanpham where chitietdonhang.MaChiTiet=chitietsanpham.id and chitietsanpham.MaSanPham=Sanpham.id',
   getByUserId:
     'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id and nguoidung.id = ?',
   updateById: 'update donhang set TinhTrang = ?, GhiChu = ? where id = ?',

@@ -2,7 +2,7 @@ const pool = require('../configs/connectDB');
 
 const queries = {
   insert:
-    'insert into chitietdonhang (MaDonHang,TenSP,Size,SoLuong,DonGia,KhuyenMai) values (?,?,?,?,?,?)',
+    'insert into chitietdonhang (MaDonHang,MaChiTiet,SoLuong,DonGia,KhuyenMai) values (?,?,?,?,?)',
   getProductDetailById:
     'select * from sanpham,chitietsanpham where sanpham.id = chitietsanpham.MaSanPham and chitietsanpham.id = ?',
   deleteByOrderId: 'delete from chitietdonhang where MaDonHang = ?',
@@ -15,11 +15,10 @@ class OrderDetail {
         id_chitiet,
       ]);
       if (!product) return new Error('Sản phẩm không tồn tại');
-      const { TenSP, DonGia, KhuyenMai, Size } = product;
+      const { DonGia, KhuyenMai } = product;
       const [result] = await pool.execute(queries.insert, [
         id_donhang,
-        TenSP,
-        Size,
+        id_chitiet,
         SoLuong,
         DonGia,
         KhuyenMai,
