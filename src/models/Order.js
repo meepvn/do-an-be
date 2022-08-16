@@ -4,9 +4,9 @@ const queries = {
   insert:
     'insert into donhang (MaNguoiDung,NgayTao,TinhTrang,GhiChu) values (?,?,?,?)',
   getAllOrders:
-    'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id',
+    'select donhang.id,MaNguoiDung,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id',
   getAllDetails:
-    'select chitietdonhang.*,TenSP,Size from chitietdonhang,sanpham,chitietsanpham where chitietdonhang.MaChiTiet=chitietsanpham.id and chitietsanpham.MaSanPham=Sanpham.id',
+    'select chitietdonhang.*,TenSP,Size,TenAnh from chitietdonhang,sanpham,chitietsanpham where chitietdonhang.MaChiTiet=chitietsanpham.id and chitietsanpham.MaSanPham=Sanpham.id',
   getByUserId:
     'select donhang.id,HoTen,SDT,NgayTao,TinhTrang,GhiChu from donhang,nguoidung where donhang.MaNguoiDung = nguoidung.id and nguoidung.id = ?',
   updateById: 'update donhang set TinhTrang = ?, GhiChu = ? where id = ?',
@@ -55,6 +55,8 @@ class Order {
 
   async getOrdersByUserId(id) {
     try {
+      const allOrders = await this.getAllOrders();
+      return allOrders.filter((order) => order.MaNguoiDung === id);
       const [orders] = await pool.execute(queries.getByUserId, [id]);
       const [details] = await pool.execute(queries.getAllDetails);
       const ordersWithDetails = orders.map((order) => {
