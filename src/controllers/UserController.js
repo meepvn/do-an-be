@@ -162,7 +162,7 @@ class UserController {
         status: 'Error',
         message: 'Tài khoản hoặc mật khẩu không đúng',
       });
-    if(matchedAccount.TinhTrang !== 1) return res.json({
+    if(matchedAccount.TrangThai !== 1) return res.json({
         status: 'Error',
         message: 'Tài khoản đã bị khóa',
     })
