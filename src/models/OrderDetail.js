@@ -6,6 +6,8 @@ const queries = {
   getProductDetailById:
     'select * from sanpham,chitietsanpham where sanpham.id = chitietsanpham.MaSanPham and chitietsanpham.id = ?',
   deleteByOrderId: 'delete from chitietdonhang where MaDonHang = ?',
+  deleteById:'delete from chitietdonhang where id = ?',
+  updateById:'update chitietdonhang set SoLuong = ? where id = ?',
 };
 
 class OrderDetail {
@@ -33,6 +35,24 @@ class OrderDetail {
   async deleteByOrderId(id) {
     try {
       const [result] = await pool.execute(queries.deleteByOrderId, [id]);
+      return result;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+
+  async deleteById(id) {
+    try {
+      const [result] = await pool.execute(queries.deleteById, [id]);
+      return result;
+    } catch (err) {
+      return new Error(err);
+    }
+  }
+
+  async updateById(SoLuong,id) {
+    try {
+      const [result] = await pool.execute(queries.updateById, [SoLuong,id]);
       return result;
     } catch (err) {
       return new Error(err);

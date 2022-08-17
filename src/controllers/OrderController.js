@@ -2,6 +2,31 @@ const orderModel = require('../models/Order');
 const detailModel = require('../models/OrderDetail');
 const { isUniqueArray } = require('../ulti/index');
 class InstockController {
+  async createEmptyOrder(req,res){
+    if (!req.body.id_nguoidung)
+      return res.json({
+        status: 'Error',
+        message: 'Missing required parameter(s)',
+        body: req.body,
+      });
+    const { id_nguoidung, TinhTrang = 1, GhiChu = '' } = req.body;
+    const orderResult = await orderModel.insertOrder(
+      id_nguoidung,
+      new Date(Date.now()),
+      TinhTrang,
+      GhiChu
+    );
+
+    if (orderResult instanceof Error)
+      return res.json({
+        status: 'Error',
+        message: orderResult?.message,
+      });
+
+      return res.json({
+        status: 'OK',
+      });
+  }
   async createOrder(req, res) {
     if (!req.body.id_nguoidung || !req.body.products)
       return res.json({

@@ -162,6 +162,10 @@ class UserController {
         status: 'Error',
         message: 'Tài khoản hoặc mật khẩu không đúng',
       });
+    if(matchedAccount.TinhTrang !== 1) return res.json({
+        status: 'Error',
+        message: 'Tài khoản đã bị khóa',
+    })
     const { MatKhau: matKhau, ...accountInfo } = matchedAccount;
     const { HoTen } = await userModel.getUserById(accountInfo.MaNguoiDung);
     const userInfo = { HoTen, ...accountInfo };
