@@ -90,13 +90,13 @@ class InstockController {
   }
 
   async updateOrderById(req, res) {
-    if (!req.body.TinhTrang || !req.body.GhiChu)
+    if (!req.body.TinhTrang)
       return res.json({
         status: 'Error',
         message: 'Missing required parameter(s)',
         body: req.body,
       });
-    const { TinhTrang, GhiChu } = req.body;
+    const { TinhTrang, GhiChu='' } = req.body;
     const updateResult = await orderModel.updateById(
       TinhTrang,
       GhiChu,
