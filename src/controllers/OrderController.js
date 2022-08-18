@@ -25,6 +25,7 @@ class InstockController {
 
       return res.json({
         status: 'OK',
+        insertId:orderResult.insertId
       });
   }
   async createOrder(req, res) {

@@ -108,7 +108,7 @@ class ProductController {
       });
     return res.json({
       status: 'OK',
-      message: result,
+      insertId: result.insertId,
     });
   }
   async uploadImage(req, res) {
