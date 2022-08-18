@@ -29,6 +29,11 @@ class OrderDetailController{
     }
 
     async updateById(req,res){
+        const {SoLuong} = req.body;
+        if(!SoLuong) return res.json({
+            status:'Error',
+            message:'Missing required parameters'
+        })
         const updateResult = await detailModel.updateById(req.params.id);
         if(updateResult instanceof Error) return res.json({
             status:'Error',
