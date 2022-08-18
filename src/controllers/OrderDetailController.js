@@ -32,9 +32,10 @@ class OrderDetailController{
         const {SoLuong} = req.body;
         if(!SoLuong) return res.json({
             status:'Error',
-            message:'Missing required parameters'
+            message:'Missing required parameters',
+            body:req.body
         })
-        const updateResult = await detailModel.updateById(req.params.id);
+        const updateResult = await detailModel.updateById(SoLuong,req.params.id);
         if(updateResult instanceof Error) return res.json({
             status:'Error',
             message:updateResult.message
