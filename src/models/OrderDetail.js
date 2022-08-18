@@ -8,6 +8,7 @@ const queries = {
   deleteByOrderId: 'delete from chitietdonhang where MaDonHang = ?',
   deleteById:'delete from chitietdonhang where id = ?',
   updateById:'update chitietdonhang set SoLuong = ? where id = ?',
+  getDetailsByOrderId:'select MaChiTiet from chitietdonhang where MaDonHang = ?'
 };
 
 class OrderDetail {
@@ -17,6 +18,9 @@ class OrderDetail {
         id_chitiet,
       ]);
       if (!product) return new Error('Sản phẩm không tồn tại');
+      let [instockIds] = await pool.execute(queries.getDetailsByOrderId,[id_donhang]);
+      instockIds = instockIds.map(instock=>instock.MaChiTiet);
+      if(instockIds.includes(id_chitiet)) return new Error('Đơn hàng đã tồn tại sản phẩm này');
       const { DonGia, KhuyenMai } = product;
       const [result] = await pool.execute(queries.insert, [
         id_donhang,
