@@ -20,7 +20,7 @@ class OrderDetail {
       if (!product) return new Error('Sản phẩm không tồn tại');
       let [instockIds] = await pool.execute(queries.getDetailsByOrderId,[id_donhang]);
       instockIds = instockIds.map(instock=>instock.MaChiTiet);
-      if(instockIds.includes(id_chitiet)) return new Error('Đơn hàng đã tồn tại sản phẩm này');
+      if(instockIds.includes(parseInt(id_chitiet))) return new Error('Đơn hàng đã tồn tại sản phẩm này');
       const { DonGia, KhuyenMai } = product;
       const [result] = await pool.execute(queries.insert, [
         id_donhang,
