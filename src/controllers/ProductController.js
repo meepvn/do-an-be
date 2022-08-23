@@ -36,6 +36,7 @@ class ProductController {
 
   async deleteProductWithId(req, res) {
     const product = await productModel.getById(req.params.id);
+    deleteImage(product.TenAnh);
     const result = await productModel.deleteWithId(req.params.id);
     if (result instanceof Error)
       return res.status(500).json({
