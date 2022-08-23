@@ -1,7 +1,7 @@
 const pool = require('../configs/connectDB');
 const bcrypt = require('bcryptjs');
 const queries = {
-  getAll: 'select * from taikhoan',
+  getAll: 'select * from taikhoan order by MaNguoiDung desc',
   insert: 'insert into taikhoan values(?,?,?,?,?,?)',
   getByUserNameAndEmail:
     'select * from taikhoan where TenTaiKhoan = ? or Email = ?',

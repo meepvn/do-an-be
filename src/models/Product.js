@@ -1,7 +1,7 @@
 const pool = require('../configs/connectDB');
 
 const queries = {
-  getAll: 'select * from sanpham',
+  getAll: 'select * from sanpham order by id desc',
   getById: 'select * from sanpham where id = ?',
   getByName: 'select * from sanpham where TenSP = ?',
   deleteById: 'delete from sanpham where id = ?',
@@ -11,7 +11,7 @@ const queries = {
     'update sanpham set TenSP = ?, Loai = ?, GioiTinh = ?, DonGia = ?, KhuyenMai = ? where id = ?',
   addImageName: 'update sanpham set TenAnh = ? where id = ?',
   getAllProductType: 'SELECT distinct Loai FROM `sanpham`',
-  getAllInstock: 'select * from chitietsanpham',
+  getAllInstock: 'select * from chitietsanpham order by id desc',
 };
 
 class Product {
