@@ -47,7 +47,7 @@ class Account {
   async findByEmail(Email) {
     try {
       const [result] = await pool.execute(queries.getByEmail, [Email]);
-      return result.length;
+      return result.length > 0;
     } catch (err) {
       return new Error(err);
     }

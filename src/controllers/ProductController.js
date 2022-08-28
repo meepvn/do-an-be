@@ -37,16 +37,14 @@ class ProductController {
   async deleteProductWithId(req, res) {
     const product = await productModel.getById(req.params.id);
     deleteImage(product.TenAnh);
-    const result = await productModel.deleteWithId(req.params.id);
-    if (result instanceof Error)
+    const instockResult = await instockModel.deleteByProductId(req.params.id);
+    if (instockResult instanceof Error)
       return res.status(500).json({
         status: 'Error',
         message: result?.message,
       });
-
-    const instockResult = await instockModel.deleteByProductId(req.params.id);
-
-    if (instockResult instanceof Error)
+    const result = await productModel.deleteWithId(req.params.id);
+    if (result instanceof Error)
       return res.status(500).json({
         status: 'Error',
         message: result?.message,

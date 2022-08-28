@@ -46,7 +46,7 @@ class User {
   async findUserByPhoneNumber(SDT) {
     try {
       const [result] = await pool.execute(queries.getUserByPhoneNumber, [SDT]);
-      return result.length;
+      return result.length > 0;
     } catch (err) {
       return new Error(err);
     }

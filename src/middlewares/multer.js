@@ -28,7 +28,7 @@ function handleUpload(req, res, next) {
     if (err instanceof multer.MulterError || !req.file) {
       return res.status(400).json({
         status: 'Error',
-        Error: !req.file ? 'Invalid file type / no file found' : err,
+        message: !req.file ? 'Invalid file type / no file found' : err,
       });
     }
     next();

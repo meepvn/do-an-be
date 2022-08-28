@@ -31,7 +31,7 @@ class UserController {
     const { HoTen, SDT, DiaChi, TenTaiKhoan, Email, MatKhau } = req.body;
 
     const isPhoneNumberExist = await userModel.findUserByPhoneNumber(SDT);
-    if (isPhoneNumberExist > 0 || isPhoneNumberExist instanceof Error) {
+    if (isPhoneNumberExist | (isPhoneNumberExist instanceof Error)) {
       return res.json({
         status: 'Error',
         message: isPhoneNumberExist?.message ?? 'Số điện thoại đã tồn tại',
@@ -42,10 +42,7 @@ class UserController {
       TenTaiKhoan,
       Email
     );
-    if (
-      areUserNameAndEmailExist > 0 ||
-      areUserNameAndEmailExist instanceof Error
-    ) {
+    if (areUserNameAndEmailExist || areUserNameAndEmailExist instanceof Error) {
       return res.json({
         status: 'Error',
         message:
@@ -92,14 +89,14 @@ class UserController {
       });
     const { HoTen, SDT, DiaChi, Email } = req.body;
     const isPhoneNumberExist = await userModel.findUserByPhoneNumber(SDT);
-    if (isPhoneNumberExist > 0 || isPhoneNumberExist instanceof Error) {
+    if (isPhoneNumberExist || isPhoneNumberExist instanceof Error) {
       return res.json({
         status: 'Error',
         message: isPhoneNumberExist?.message ?? 'Số điện thoại đã tồn tại',
       });
     }
     const isEmailExist = await accountModel.findByEmail(Email);
-    if (isEmailExist > 0 || isEmailExist instanceof Error) {
+    if (isEmailExist || isEmailExist instanceof Error) {
       return res.json({
         status: 'Error',
         message: isEmailExist?.message ?? 'Email đã tồn tại',
@@ -162,10 +159,11 @@ class UserController {
         status: 'Error',
         message: 'Tài khoản hoặc mật khẩu không đúng',
       });
-    if(matchedAccount.TrangThai !== 1) return res.json({
+    if (matchedAccount.TrangThai !== 1)
+      return res.json({
         status: 'Error',
         message: 'Tài khoản đã bị khóa',
-    })
+      });
     const { MatKhau: matKhau, ...accountInfo } = matchedAccount;
     const { HoTen } = await userModel.getUserById(accountInfo.MaNguoiDung);
     const userInfo = { HoTen, ...accountInfo };

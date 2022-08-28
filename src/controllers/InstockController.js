@@ -43,7 +43,7 @@ class InstockController {
     });
   }
   async updateInstock(req, res) {
-    if (!req.body.SoLuong)
+    if (!req.body.SoLuong && req.body.SoLuong !== 0)
       return res.status(200).json({
         status: 'Error',
         message: 'Missing required parameter(s)',
